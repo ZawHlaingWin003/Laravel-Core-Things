@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Auth\FacebookLoginController;
+use App\Http\Controllers\Auth\GithubLoginController;
+use App\Http\Controllers\Auth\GoogleLoginController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\HomeController;
@@ -22,62 +25,25 @@ use Laravel\Socialite\Facades\Socialite;
 |
 */
 
-Route::get('/auth/github/redirect', function () {
-    return Socialite::driver('github')->redirect();
-});
 
-Route::get('/auth/github/callback', function () {
-    $githubUser = Socialite::driver('github')->user();
+Route::middleware('guest')->group(function () {
+    Route::get('/register', [RegisterController::class, 'create'])->name('register');
+    Route::post('/register', [RegisterController::class, 'store'])->name('register.store');
 
-    // store github user data in db
-    $user = User::updateOrCreate([
-        'github_id' => $githubUser->id
-    ], [
-        'name' => $githubUser->name,
-        'email' => $githubUser->email,
-        'password' => $githubUser->id,
-        'avatar' => $githubUser->avatar,
-        'github_id' => $githubUser->id,
-        'github_token' => $githubUser->token
-    ]);
+    Route::get('/login', [LoginController::class, 'create'])->name('login');
+    Route::post('/login', [LoginController::class, 'store'])->name('login.store');
 
-    // authenticate that stored user
-    auth()->login($user);
+    Route::get('/auth/github/redirect', [GithubLoginController::class, 'redirect']);
+    Route::get('/auth/github/callback', [GithubLoginController::class, 'callback']);
 
-    // response something (In API, we maybe response auth token as JSON)
-    return redirect(RouteServiceProvider::HOME);
+    Route::get('/auth/google/redirect', [GoogleLoginController::class, 'redirect']);
+    Route::get('/auth/google/callback', [GoogleLoginController::class, 'callback']);
+
+    Route::get('/auth/facebook/redirect', [FacebookLoginController::class, 'redirect']);
+    Route::get('/auth/facebook/callback', [FacebookLoginController::class, 'callback']);
 });
 
 
-Route::get('/auth/google/redirect', function () {
-    return Socialite::driver('google')->redirect();
-});
-
-Route::get('/auth/google/callback', function () {
-    try {
-        $googleUser = Socialite::driver('google')->user();
-
-        // store github user data in db
-        $user = User::updateOrCreate([
-            'google_id' => $googleUser->id
-        ], [
-            'name' => $googleUser->name,
-            'email' => $googleUser->email,
-            'password' => $googleUser->id,
-            'avatar' => $googleUser->avatar,
-            'google_id' => $googleUser->id,
-        ]);
-
-        // authenticate that stored user
-        auth()->login($user);
-
-        // response something (In API, we maybe response auth token as JSON)
-        return redirect(RouteServiceProvider::HOME);
-
-    } catch (\Throwable $th) {
-        throw $th;
-    }
-});
 
 
 Route::middleware('auth')->group(function () {
@@ -105,13 +71,4 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('/posts', PostController::class);
 
-});
-
-
-Route::middleware('guest')->group(function () {
-    Route::get('/register', [RegisterController::class, 'create'])->name('register');
-    Route::post('/register', [RegisterController::class, 'store'])->name('register.store');
-
-    Route::get('/login', [LoginController::class, 'create'])->name('login');
-    Route::post('/login', [LoginController::class, 'store'])->name('login.store');
 });

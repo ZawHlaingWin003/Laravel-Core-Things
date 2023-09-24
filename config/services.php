@@ -37,6 +37,13 @@ return [
         'redirect' => 'http://localhost:8000/auth/github/callback',
     ],
 
+    'facebook' => [
+        'client_id' => env('Facebook_CLIENT_ID'),
+        'client_secret' => env('Facebook_CLIENT_SECRET'),
+        'redirect' => 'http://localhost:8000/auth/facebook/callback',
+        // 'redirect' => 'https://b323-103-81-113-223.ngrok-free.app/auth/facebook/callback'
+    ],
+
     'google' => [
         'client_id' => env('GOOGLE_CLIENT_ID'),
         'client_secret' => env('GOOGLE_CLIENT_SECRET'),

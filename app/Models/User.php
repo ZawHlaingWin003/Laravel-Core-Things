@@ -30,6 +30,8 @@ class User extends Authenticatable
         'password',
         'github_id',
         'github_token',
+        'facebook_id',
+        'facebook_token',
         'google_id'
     ];
 
@@ -64,6 +66,11 @@ class User extends Authenticatable
         return Attribute::make(
             get: fn ($value) => strtoupper($value)
         );
+    }
+
+    public function oauthProvider()
+    {
+        return $this->hasOne(OauthProvider::class);
     }
 
     public function folders()

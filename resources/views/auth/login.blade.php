@@ -42,9 +42,17 @@
                 <div class="text-center">
                     <a class="text-decoration-none" href="{{ route('register') }}">Create an account</a>
                 </div>
+                <div class="my-3 text-center">Or Login With</div>
                 <div class="d-flex justify-content-between">
-                    <a class="btn btn-success" href="">Login With Google</a>
-                    <a class="btn btn-secondary" href="/auth/github/redirect">Login With Github</a>
+                    <a class="btn btn-success" href="">
+                        Google <i class="fa-brands fa-google"></i>
+                    </a>
+                    <a class="btn btn-primary" href="/auth/facebook/redirect">
+                        Facebook <i class="fa-brands fa-facebook"></i>
+                    </a>
+                    <a class="btn btn-secondary" href="/auth/github/redirect">
+                        Github <i class="fa-brands fa-github"></i>
+                    </a>
                 </div>
             </form>
         </div>

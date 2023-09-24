@@ -38,7 +38,8 @@ class FolderController extends Controller
             'user_id' => auth()->user()->id
         ]);
 
-        return response()->json(['message' => 'Create Folder Successfully!']);
+        // return response()->json(['message' => 'Create Folder Successfully!']);
+        return redirect()->route('folder.index')->with('success', 'Success!');
     }
 
     public function show($id)
